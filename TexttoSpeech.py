@@ -3,6 +3,7 @@
 Note: ssml must be well-formed according to:
     https://www.w3.org/TR/speech-synthesis/
 """
+import os
 from google.cloud import texttospeech
 
 
@@ -31,11 +32,14 @@ def convert_to_speech(textFile):
     )
 
     output = "output.mp3"
+    if os.path.exists(output):
+        os.remove(output)
 
     # The response's audio_content is binary.
     with open(output, "wb") as out:
         # Write the response to the output file.
         out.write(response.audio_content)
-        print('Audio content written to file "output.mp3"')
+        # print('Audio content written to file "output.mp3"')
+
     return output
 

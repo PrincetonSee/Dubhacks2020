@@ -1,9 +1,16 @@
 import sounddevice
+import soundfile as sf
 from scipy.io.wavfile import write
 
-fs = 44100
-second = 10
-print("recording...")
-record_voice = sounddevice.rec(int(second*fs), samplerate=fs, channels=2)
-sounddevice.wait()
-write("output.wav", fs, record_voice)
+
+def get_recording(time):
+    fs = 16000
+    second = time
+    # print("recording for {} seconds".format(second))
+    record_voice = sounddevice.rec(int(second * fs), samplerate=fs, channels=2, blocking=True)
+    # print("finished recording.")
+    write("output.wav", fs, record_voice)
+    record_voice, fs = sf.read("output.wav")
+    sf.write("output.flac", record_voice, fs)
+
+    return "output.flac"
